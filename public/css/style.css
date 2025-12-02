@@ -1,0 +1,120 @@
+/* ---------- BASE PAGE STYLE ---------- */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eef1f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- NAVIGATION BAR ---------- */
+
+.navbar {
+    background: #222;
+    padding: 12px;
+}
+
+.navbar .nav-link {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* ---------- FORM BOX STYLE ---------- */
+
+.form-box {
+    max-width: 450px;
+}
+
+.form-box input,
+.form-box textarea,
+.form-box select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* ---------- BUTTONS ---------- */
+
+.btn {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+.btn-small {
+    background: #007bff;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-small:hover {
+    opacity: 0.85;
+}
+
+.btn-small.delete {
+    background: #d9534f;
+}
+
+/* ---------- TASK TABLE STYLING ---------- */
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.task-table th,
+.task-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.task-table th {
+    background: #f2f2f2;
+}
+
+/* ---------- TEXT ---------- */
+
+h1, h2 {
+    margin-top: 0;
+}
+
+/* ---------- LAYOUT EXTRAS ---------- */
+
+.links .btn {
+    margin-right: 10px;
+}

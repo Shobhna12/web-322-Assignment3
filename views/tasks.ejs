@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Tasks</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include("partials/nav"); %>
+
+<div class="container">
+
+    <h1>Your Tasks</h1>
+
+    <a href="/tasks/add" class="btn">Add New Task</a>
+
+    <% if (tasks.length === 0) { %>
+        <p>No tasks yet. Click "Add New Task" to create one.</p>
+    <% } else { %>
+
+        <table class="task-table">
+            <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            <% tasks.forEach(task => { %>
+                <tr>
+                    <td><%= task.title %></td>
+                    <td><%= task.dueDate ? task.dueDate.toDateString() : "—" %></td>
+                    <td><%= task.status %></td>
+
+                    <td>
+
+                        <form method="post" action="/tasks/status/<%= task.id %>" style="display:inline;">
+                            <button class="btn-small">
+                                <% if (task.status === "pending") { %>
+                                    Mark Completed
+                                <% } else { %>
+                                    Mark Pending
+                                <% } %>
+                            </button>
+                        </form>
+
+                        <a class="btn-small" href="/tasks/edit/<%= task.id %>">Edit</a>
+
+                        <form method="post" action="/tasks/delete/<%= task.id %>" style="display:inline;">
+                            <button class="btn-small delete">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+            <% }) %>
+
+        </table>
+
+    <% } %>
+
+</div>
+
+</body>
+</html>

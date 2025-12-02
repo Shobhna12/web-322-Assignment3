@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include("partials/nav"); %>
+
+<div class="container">
+    <h1>Dashboard</h1>
+    <p>Welcome <%= user.username %>!</p>
+
+    <a href="/tasks" class="btn">View My Tasks</a>
+</div>
+
+</body>
+</html>

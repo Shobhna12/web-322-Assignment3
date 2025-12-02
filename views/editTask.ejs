@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include("partials/nav"); %>
+
+<div class="container form-box">
+
+    <h2>Edit Task</h2>
+
+    <form method="post" action="/tasks/edit/<%= task.id %>">
+
+        <label>Title</label>
+        <input type="text" name="title" value="<%= task.title %>" required>
+
+        <label>Description</label>
+        <textarea name="description" rows="4"><%= task.description %></textarea>
+
+        <label>Due Date</label>
+        <input type="date" name="dueDate"
+               value="<%= task.dueDate ? task.dueDate.toISOString().split('T')[0] : '' %>">
+
+        <label>Status</label>
+        <select name="status">
+            <option value="pending" <%= task.status === "pending" ? "selected" : "" %>>Pending</option>
+            <option value="completed" <%= task.status === "completed" ? "selected" : "" %>>Completed</option>
+        </select>
+
+        <button class="btn" style="margin-top: 10px;">Save Changes</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

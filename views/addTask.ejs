@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Task</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include("partials/nav"); %>
+
+<div class="container form-box">
+
+    <h2>Add New Task</h2>
+
+    <form method="post" action="/tasks/add">
+
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Description</label>
+        <textarea name="description" rows="4"></textarea>
+
+        <label>Due Date</label>
+        <input type="date" name="dueDate">
+
+        <label>Status</label>
+        <select name="status">
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+        </select>
+
+        <button class="btn" style="margin-top: 10px;">Add Task</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
