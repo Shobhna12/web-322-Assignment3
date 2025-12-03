@@ -2,97 +2,62 @@
 *  WEB322 – Assignment 03
 *
 *  I declare that this assignment is my own work in accordance with Seneca's
-*  Academic Integrity Policy:
-*
-*  https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
-*
-*  Name: ______________________ Student ID: ______________ Date: ______________
+*  Academic Integrity Policy.
 *
 ********************************************************************************/
 
 require("dotenv").config();
-
 const express = require("express");
-const mongoose = require("mongoose");
-const session = require("client-sessions");
-const path = require("path");
+const clientSessions = require("client-sessions");
 
-const app = express();
+const connectMongo = require("./config/mongoose");
+const sequelize = require("./config/sequelize");
 
-// Routes
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 
-// PostgreSQL
-const { sequelize } = require("./config/postgres");
+async function createServer() {
+  const app = express();
 
-// -----------------------------------------------------------------------------
-// MIDDLEWARE
-// -----------------------------------------------------------------------------
+  // EJS View Engine
+  app.set("view engine", "ejs");
+  app.set("views", __dirname + "/views");
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
-app.use(express.static("public"));
+  // Middleware
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.static("public"));               // Main static folder
+  app.use(express.static(__dirname + "/public"));  // Double-safe for Vercel
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+  // Sessions
+  app.use(
+    clientSessions({
+      cookieName: "session",
+      secret: process.env.SESSION_SECRET,
+      duration: 30 * 60 * 1000,
+      activeDuration: 10 * 60 * 1000,
+    })
+  );
 
-// session middleware
-app.use(
-  session({
-    cookieName: "session",
-    secret: process.env.SESSION_SECRET,
-    duration: 30 * 60 * 1000, // 30 min
-  })
-);
-
-// -----------------------------------------------------------------------------
-// DATABASE CONNECTIONS
-// -----------------------------------------------------------------------------
-
-// MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Error:", err));
-
-// PostgreSQL test connection
-sequelize
-  .authenticate()
-  .then(() => console.log("PostgreSQL Connected"))
-  .catch((err) => console.log("PostgreSQL Error:", err));
-
-// -----------------------------------------------------------------------------
-// ROUTES
-// -----------------------------------------------------------------------------
-
-// Landing page
-app.get("/", (req, res) => {
-  res.render("home"); // Make views/home.ejs
-});
-
-// About page
-app.get("/about", (req, res) => {
-  res.render("about"); // Make views/about.ejs
-});
-
-// Auth + Task routes
-app.use("/", authRoutes);
-app.use("/", taskRoutes);
-
-// 404 Page (must be last)
-app.use((req, res) => {
-  res.status(404).render("404"); // Make views/404.ejs
-});
-
-// -----------------------------------------------------------------------------
-// SERVER START
-// -----------------------------------------------------------------------------
-
-const PORT = process.env.PORT || 3000;
-
-sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  // User in locals
+  app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
   });
-});
+
+  // ROUTES
+  app.get("/", (req, res) => res.render("home"));
+  app.use("/", authRoutes);
+  app.use("/", taskRoutes);
+
+  // Connect Databases FIRST (important for serverless)
+  await connectMongo();
+  await sequelize.authenticate();
+  await sequelize.sync();
+
+  console.log("All databases connected ✔");
+
+  return app;
+}
+
+// Vercel expects an exported function OR object
+module.exports = createServer();
